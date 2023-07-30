@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Authenticator", "Authenticator\Authenticator.csproj", "{74C01E2A-E8A7-4B6F-82B9-48A046E97086}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{EA9AE579-73A6-44AB-A1BD-6A553F98526A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{74C01E2A-E8A7-4B6F-82B9-48A046E97086}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74C01E2A-E8A7-4B6F-82B9-48A046E97086}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74C01E2A-E8A7-4B6F-82B9-48A046E97086}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74C01E2A-E8A7-4B6F-82B9-48A046E97086}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA9AE579-73A6-44AB-A1BD-6A553F98526A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA9AE579-73A6-44AB-A1BD-6A553F98526A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA9AE579-73A6-44AB-A1BD-6A553F98526A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA9AE579-73A6-44AB-A1BD-6A553F98526A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C3CC4AF9-7201-40D9-85A7-29FB2C760089}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,1 @@
+# coding-kata-aws-authenticator

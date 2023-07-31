@@ -3,43 +3,46 @@
 using Amazon.DynamoDBv2.DataModel;
 using global::AuthenticationService.Exceptions;
 using global::AuthenticationService.Models;
+using global::AuthenticationService.Security;
 
 public interface IAuthenticationService
 {
     /// <summary>
     /// Verifies that the credentials are valid and stored in the DB
     /// </summary>
-    /// <param name="encryptedUsername">encrypted username</param>
-    /// <param name="encryptedPassword">encrypted password</param>
+    /// <param name="username">plain username</param>
+    /// <param name="password">plain password</param>
     /// <returns></returns>
-    Task<bool> AreCredentialsValidAsync(string encryptedUsername, string encryptedPassword);
+    Task<bool> AreCredentialsValidAsync(string username, string password);
 }
 
 public class AuthenticationService : IAuthenticationService
 {
-    private readonly IDynamoDBContext _dynamoDBContext;
     private readonly ILogger<AuthenticationService> _logger;
+    private readonly IDynamoDBContext _dynamoDBContext;
+    private readonly IAesEncryptionService _aesEncryptionService;
 
-    public AuthenticationService(IDynamoDBContext dynamoDBContext,
-    ILogger<AuthenticationService> logger)
+    public AuthenticationService(ILogger<AuthenticationService> logger,
+                                    IDynamoDBContext dynamoDBContext,
+                                    IAesEncryptionService aesEncryptionService)
     {
         _logger = logger;
         _dynamoDBContext = dynamoDBContext;
+        _aesEncryptionService = aesEncryptionService;
     }
 
-    public async Task<bool> AreCredentialsValidAsync(string encryptedUsername, string encryptedPassword)
+    public async Task<bool> AreCredentialsValidAsync(string username, string password)
     {
-        if (string.IsNullOrEmpty(encryptedUsername) || string.IsNullOrEmpty(encryptedPassword))
+        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             return false;
         try
         {
-            // Get the user's record from DynamoDB
-            var credentials = await GetCredentials(encryptedUsername);
-
-            bool isPasswordValid = string.Equals(encryptedPassword, credentials.encryptedPassword, StringComparison.Ordinal);
+            var credentials = await GetCredentials(username);
+            var encryptedPassword = _aesEncryptionService.EncryptString(password);
+            bool isPasswordValid = string.Equals(encryptedPassword, credentials.Password, StringComparison.Ordinal);
             if (!isPasswordValid)
             {
-                _logger.LogWarning($"Password of {encryptedUsername} invalid and not equal as in DB");
+                _logger.LogWarning($"Password of {username} invalid and not present in DB");
                 return false;
             }
             return isPasswordValid;
@@ -51,12 +54,13 @@ public class AuthenticationService : IAuthenticationService
         }
     }
 
-    private async Task<(string encryptedUsername, string encryptedPassword)> GetCredentials(string encryptedUsername)
+    private async Task<Credential> GetCredentials(string username)
     {
+        var encryptedUsername = _aesEncryptionService.EncryptString(username);
         var credential = await _dynamoDBContext.LoadAsync<Credential>(encryptedUsername);
         if (credential?.Password == null)
-            throw new AuthenticatorException($"No record found for {encryptedUsername}");
+            throw new AuthenticatorException($"No record found for {username}");
 
-        return (encryptedUsername, credential.Password);
+        return credential;
     }
 }

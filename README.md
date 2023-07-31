@@ -13,7 +13,6 @@
 * API Gateway
 
 # AuthenticationService
-* I assume that the credentials sent via HTTP headers are already encrypted and therefore stored in the database in encrypted form.
 * You can run the UnitTests, debugging was not possible for me anymore, because I have no AppConfig
 * The Amazon AppConfig stores all configuration values, developers can also use environment variables
 * UnitTests should be more, 90-100% code coverage is necessary, because it is a security related service

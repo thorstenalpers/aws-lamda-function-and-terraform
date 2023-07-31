@@ -25,7 +25,7 @@ public class AuthenticationFunction
     /// <summary>
     /// Validates credentials
     /// </summary>
-    /// <param name="request">HttpHeader with Basic Authentication base64 encoded and encrypted</param>
+    /// <param name="request">HttpHeader with Basic Authentication base64 encoded</param>
     /// <param name="context"></param>
     /// <returns>Status Code 200 on success, otherwise 401 </returns>
     [Authorize]
@@ -44,10 +44,13 @@ public class AuthenticationFunction
             {
                 return GenerateUnauthorizedResponse("Invalid basic authentication credentials");
             }
-            var encryptedUsername = encodedCredentials.Substring(0, separatorIndex);
-            var encryptedPassword = encodedCredentials.Substring(separatorIndex + 1);
+            var encodedUsername = encodedCredentials.Substring(0, separatorIndex);
+            var encodedPassword = encodedCredentials.Substring(separatorIndex + 1);
 
-            var areCredentialsValid = await _authenticationService.AreCredentialsValidAsync(encryptedUsername, encryptedPassword);
+            var username = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(encodedUsername));
+            var password = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(encodedPassword));
+
+            var areCredentialsValid = await _authenticationService.AreCredentialsValidAsync(username, password);
             if (!areCredentialsValid)
             {
                 return GenerateUnauthorizedResponse("Credentials invalid or not found");

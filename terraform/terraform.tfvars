@@ -1,11 +1,14 @@
-# Specify existing VPC ID to use it:
-# vpc_id = "vpc-9651acf1"
-
-# Or, create a new VPC:
-name = "my-vpc"
-
-cidr = "10.10.0.0/16"
-
-azs = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
-
-public_subnets = ["10.10.101.0/24", "10.10.102.0/24", "10.10.103.0/24"]
+aws_region = "eu-central-1"
+app_name = "AuthenticationService"
+app_description = "Validates credentials and verifies that they exists"
+profile_name = "AuthenticationService-config-profile"
+profile_description = "AppConfig configuration profile for AuthenticationService"
+profile_location_uri = "s3://example-bucket/example-config.json" # Replace with your S3 bucket and configuration file
+env_name = "local"
+env_description = "AppConfig environment"
+resource_group_name = "rg-authentication-service"
+lambda_function_name = "lambda-authentication-service"
+ApiKey = "SomeApiKey"
+CipherKey = "SomeCipherKey"
+CipherIv = "SomeCipherIv"
+lambda_function_zip_path = "path/to/your/lambda_function.zip"

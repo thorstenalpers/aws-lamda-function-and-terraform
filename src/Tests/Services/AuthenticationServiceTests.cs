@@ -14,7 +14,7 @@ using AuthenticationService.Backend.Models;
 public class AuthenticationServiceTests
 {
     private MockRepository _mockRepository;
-    private Mock<ICredentialRepository> _mockCredentialRepository;
+    private Mock<ICredentialReadRepository> _mockCredentialRepository;
     private Mock<IPasswordHasherService> _mockPasswordHasherService;
     private Mock<ILogger<AuthenticationService>> _mockLogger;
 
@@ -23,7 +23,7 @@ public class AuthenticationServiceTests
     {
         _mockRepository = new MockRepository(MockBehavior.Strict);
 
-        _mockCredentialRepository = _mockRepository.Create<ICredentialRepository>();
+        _mockCredentialRepository = _mockRepository.Create<ICredentialReadRepository>();
         _mockPasswordHasherService = _mockRepository.Create<IPasswordHasherService>();
         _mockLogger = new Mock<ILogger<AuthenticationService>>();
     }

@@ -3,11 +3,9 @@
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using AuthenticationService.Backend;
-using AuthenticationService.Backend.Options;
 using AuthenticationService.Backend.Security;
 using AuthenticationService.Backend.Services;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -21,7 +19,6 @@ public class AuthenticationFunctionTests
     private Mock<ILogger<AuthenticationFunction>> _mockLogger;
     private Mock<IAuthenticationService> _mockAuthenticationService;
     private Mock<ILambdaContext> _mockLambdaContext;
-    private Mock<IOptionsSnapshot<AuthenticationServiceOptions>> _mockAuthOptions;
 
     [SetUp]
     public void SetUp()
@@ -31,12 +28,6 @@ public class AuthenticationFunctionTests
         _mockAuthenticationService = _mockRepository.Create<IAuthenticationService>();
         _mockLambdaContext = _mockRepository.Create<ILambdaContext>();
         _mockLogger = new Mock<ILogger<AuthenticationFunction>>();
-        _mockAuthOptions = _mockRepository.Create<IOptionsSnapshot<AuthenticationServiceOptions>>();
-        _mockAuthOptions.Setup(x => x.Value).Returns(
-            new AuthenticationServiceOptions
-            {
-                Salt = "$2a$12$hG5lf/9xPbovhz8kATDgd.",
-            });
     }
 
     [Test]
@@ -76,11 +67,11 @@ public class AuthenticationFunctionTests
         _mockLogger.VerifyLog(logger => logger.LogWarning("Unauthorized: Credentials invalid or not found"), Times.Once);
     }
 
-    private APIGatewayProxyRequest CreateValidRequest()
+    private static APIGatewayProxyRequest CreateValidRequest()
     {
-        var aesEncryptionService = new PasswordHasherService(_mockAuthOptions.Object);
-        var username = "";//aesEncryptionService.EncryptString("Username");
-        var password = ""; //aesEncryptionService.EncryptString("Password");
+        var aesEncryptionService = new PasswordHasherService();
+        var username = "Username";
+        var password = "Password";
         var request = new APIGatewayProxyRequest
         {
             Headers = new Dictionary<string, string>

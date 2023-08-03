@@ -18,10 +18,10 @@ public class AuthenticationService : IAuthenticationService
 {
     private readonly ILogger<AuthenticationService> _logger;
     private readonly IPasswordHasherService _passwordHasherService;
-    private readonly ICredentialRepository _credentialRepository;
+    private readonly ICredentialReadRepository _credentialRepository;
 
     public AuthenticationService(ILogger<AuthenticationService> logger,
-                                    ICredentialRepository credentialRepository,
+                                    ICredentialReadRepository credentialRepository,
                                     IPasswordHasherService passwordHasherService)
     {
         _logger = logger;

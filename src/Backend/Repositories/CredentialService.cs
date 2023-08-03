@@ -5,13 +5,13 @@ using AuthenticationService.Backend.Exceptions;
 using AuthenticationService.Backend.Models;
 using System.Diagnostics.CodeAnalysis;
 
-public interface ICredentialRepository
+public interface ICredentialReadRepository
 {
     Task<Credential> GetCredentialsAsync(string username);
 }
 
 [ExcludeFromCodeCoverage]
-public class CredentialRepository : ICredentialRepository
+public class CredentialRepository : ICredentialReadRepository
 {
     private readonly IDynamoDBContext _dynamoDBContext;
 

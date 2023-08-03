@@ -10,27 +10,12 @@ using NUnit.Framework;
 [Category("UnitTests")]
 public class PasswordHasherServiceTests
 {
-    private MockRepository _mockRepository;
-    private Mock<IOptionsSnapshot<AuthenticationServiceOptions>> _mockAuthOptions;
-
-    [SetUp]
-    public void SetUp()
-    {
-        _mockRepository = new MockRepository(MockBehavior.Strict);
-
-        _mockAuthOptions = _mockRepository.Create<IOptionsSnapshot<AuthenticationServiceOptions>>();
-        _mockAuthOptions.Setup(x => x.Value).Returns(
-            new AuthenticationServiceOptions
-            {
-                Salt = "$2a$12$hG5lf/9xPbovhz8kATDgd."
-            });
-    }
 
     [TestCase]
     public void HashPassword_Success()
     {
         // Arrange
-        var service = new PasswordHasherService(_mockAuthOptions.Object);
+        var service = new PasswordHasherService();
         string plainPassword = "Password";
 
         // Act
@@ -44,7 +29,7 @@ public class PasswordHasherServiceTests
     public void VerifyPassword_Success()
     {
         // Arrange
-        var service = new PasswordHasherService(_mockAuthOptions.Object);
+        var service = new PasswordHasherService();
         string plainPassword = "Password";
         string hashedPassword = "$2a$12$hG5lf/9xPbovhz8kATDgd.IpixYS9k3TuKLckJmE4CAMRlMNTmPxu";
 

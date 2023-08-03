@@ -23,13 +23,6 @@ public interface IPasswordHasherService
 
 public class PasswordHasherService : IPasswordHasherService
 {
-    private readonly AuthenticationServiceOptions _authenticatorOptions;
-
-    public PasswordHasherService(IOptionsSnapshot<AuthenticationServiceOptions> authenticatorOptions)
-    {
-        _authenticatorOptions = authenticatorOptions.Value;
-    }
-
     public string HashPassword(string plainPassword)
     {
         string salt = "$2a$12$hG5lf/9xPbovhz8kATDgd.";

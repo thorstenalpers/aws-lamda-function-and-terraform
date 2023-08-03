@@ -39,7 +39,7 @@ public class Startup
             return new DynamoDBContext(dynamoDbClient, dynamoDbConfig);
         });
 
-        services.AddScoped<ICredentialRepository, CredentialRepository>();
+        services.AddScoped<ICredentialReadRepository, CredentialRepository>();
         services.AddScoped<IPasswordHasherService, PasswordHasherService>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddLogging(ConfigureLogging);

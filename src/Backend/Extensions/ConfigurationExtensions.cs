@@ -1,4 +1,4 @@
-﻿namespace AuthenticationService.Extensions;
+﻿namespace AuthenticationService.Backend.Extensions;
 
 using Amazon;
 using Amazon.AppConfig;

@@ -1,4 +1,4 @@
-﻿namespace AuthenticationService.Security;
+﻿namespace AuthenticationService.Backend.Security;
 
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;

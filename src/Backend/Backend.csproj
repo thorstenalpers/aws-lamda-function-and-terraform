@@ -6,8 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
     <RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
-    <RootNamespace>AuthenticationService</RootNamespace>
-    <AssemblyName>AuthenticationService</AssemblyName>
+    <RootNamespace>AuthenticationService.Backend</RootNamespace>
+    <AssemblyName>AuthenticationService.Backend</AssemblyName>
     <AnalysisLevel>latest-recommended</AnalysisLevel>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <AWSProjectType>Lambda</AWSProjectType>

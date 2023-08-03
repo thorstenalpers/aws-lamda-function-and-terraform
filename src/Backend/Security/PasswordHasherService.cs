@@ -1,6 +1,6 @@
-﻿namespace AuthenticationService.Security;
+﻿namespace AuthenticationService.Backend.Security;
 
-using AuthenticationService.Options;
+using AuthenticationService.Backend.Options;
 using Microsoft.Extensions.Options;
 
 public interface IPasswordHasherService

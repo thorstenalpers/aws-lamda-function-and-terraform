@@ -1,6 +1,6 @@
-﻿namespace AuthenticationService;
+﻿namespace AuthenticationService.Backend;
 
-using AuthenticationService.Extensions;
+using AuthenticationService.Backend.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using System.Diagnostics.CodeAnalysis;

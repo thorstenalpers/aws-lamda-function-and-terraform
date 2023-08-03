@@ -1,15 +1,14 @@
-﻿namespace AuthenticationService;
+﻿namespace AuthenticationService.Backend;
 
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
-using AuthenticationService.Options;
-using AuthenticationService.Repositories;
-using AuthenticationService.Security;
+using AuthenticationService.Backend.Options;
+using AuthenticationService.Backend.Repositories;
+using AuthenticationService.Backend.Security;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using System.Diagnostics.CodeAnalysis;
-using AuthenticationService = Services.AuthenticationService;
 
 [ExcludeFromCodeCoverage]
 public class Startup
@@ -42,7 +41,7 @@ public class Startup
 
         services.AddScoped<ICredentialRepository, CredentialRepository>();
         services.AddScoped<IPasswordHasherService, PasswordHasherService>();
-        services.AddScoped<Services.IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddLogging(ConfigureLogging);
         services.AddAuthentication("ServiceAuthenticationScheme")
             .AddScheme<AuthenticationSchemeOptions, ServiceAuthenticationHandler>("ServiceAuthenticationScheme", null);

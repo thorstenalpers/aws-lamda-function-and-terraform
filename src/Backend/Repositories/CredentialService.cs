@@ -1,8 +1,8 @@
-﻿namespace AuthenticationService.Repositories;
+﻿namespace AuthenticationService.Backend.Repositories;
 
 using Amazon.DynamoDBv2.DataModel;
-using AuthenticationService.Exceptions;
-using AuthenticationService.Models;
+using AuthenticationService.Backend.Exceptions;
+using AuthenticationService.Backend.Models;
 using System.Diagnostics.CodeAnalysis;
 
 public interface ICredentialRepository

@@ -1,6 +1,6 @@
-namespace AuthenticationService;
+namespace AuthenticationService.Backend;
 
-using AuthenticationService.Extensions;
+using AuthenticationService.Backend.Extensions;
 using System.Diagnostics.CodeAnalysis;
 
 /// <summary>

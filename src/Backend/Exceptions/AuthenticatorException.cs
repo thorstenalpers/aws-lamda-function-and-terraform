@@ -1,4 +1,4 @@
-﻿namespace AuthenticationService.Exceptions;
+﻿namespace AuthenticationService.Backend.Exceptions;
 
 using System.Diagnostics.CodeAnalysis;
 

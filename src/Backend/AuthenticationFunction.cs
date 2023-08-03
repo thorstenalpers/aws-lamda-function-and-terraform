@@ -2,12 +2,12 @@ using Amazon.Lambda.Core;
 
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
 
-namespace AuthenticationService;
+namespace AuthenticationService.Backend;
 
 using System;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
-using AuthenticationService.Services;
+using AuthenticationService.Backend.Services;
 using Microsoft.AspNetCore.Authorization;
 
 public class AuthenticationFunction

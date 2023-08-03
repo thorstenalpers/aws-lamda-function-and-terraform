@@ -1,14 +1,13 @@
 ﻿namespace AuthenticationService.Tests.Services;
 
-using AuthenticationService.Models;
-using AuthenticationService.Repositories;
-using AuthenticationService.Security;
-using AuthenticationService.Services;
+using AuthenticationService.Backend.Repositories;
+using AuthenticationService.Backend.Security;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using System.Threading.Tasks;
-
+using AuthenticationService.Backend.Services;
+using AuthenticationService.Backend.Models;
 
 [TestFixture]
 [Category("UnitTests")]

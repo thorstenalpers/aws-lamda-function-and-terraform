@@ -1,9 +1,9 @@
-﻿namespace AuthenticationService.Security;
+﻿namespace AuthenticationService.Backend.Security;
 
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
-using AuthenticationService.Options;
+using AuthenticationService.Backend.Options;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

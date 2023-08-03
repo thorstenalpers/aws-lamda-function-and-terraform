@@ -1,7 +1,7 @@
 ﻿namespace AuthenticationService.Tests.Services;
 
-using AuthenticationService.Options;
-using AuthenticationService.Security;
+using AuthenticationService.Backend.Options;
+using AuthenticationService.Backend.Security;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;

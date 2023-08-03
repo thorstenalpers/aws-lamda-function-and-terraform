@@ -1,6 +1,7 @@
-﻿namespace AuthenticationService.Services;
-using global::AuthenticationService.Repositories;
-using global::AuthenticationService.Security;
+﻿namespace AuthenticationService.Backend.Services;
+
+using global::AuthenticationService.Backend.Repositories;
+using global::AuthenticationService.Backend.Security;
 
 public interface IAuthenticationService
 {

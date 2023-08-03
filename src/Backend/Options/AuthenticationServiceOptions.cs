@@ -1,4 +1,4 @@
-namespace AuthenticationService.Options;
+namespace AuthenticationService.Backend.Options;
 
 using System.Diagnostics.CodeAnalysis;
 

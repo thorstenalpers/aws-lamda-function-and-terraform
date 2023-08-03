@@ -2,9 +2,10 @@
 
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
-using AuthenticationService.Options;
-using AuthenticationService.Security;
-using AuthenticationService.Services;
+using AuthenticationService.Backend;
+using AuthenticationService.Backend.Options;
+using AuthenticationService.Backend.Security;
+using AuthenticationService.Backend.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;

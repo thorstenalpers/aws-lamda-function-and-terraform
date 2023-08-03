@@ -1,4 +1,4 @@
-﻿namespace AuthenticationService.Models;
+﻿namespace AuthenticationService.Backend.Models;
 
 using System.Diagnostics.CodeAnalysis;
 

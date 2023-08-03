@@ -10,8 +10,13 @@ public interface ICredentialReadRepository
     Task<Credential> GetCredentialsAsync(string username);
 }
 
+public interface ICredentialWriteRepository
+{
+    Task SaveCredentialsAsync(Credential credential);
+}
+
 [ExcludeFromCodeCoverage]
-public class CredentialRepository : ICredentialReadRepository
+public class CredentialRepository : ICredentialReadRepository, ICredentialWriteRepository
 {
     private readonly IDynamoDBContext _dynamoDBContext;
 
@@ -27,5 +32,10 @@ public class CredentialRepository : ICredentialReadRepository
             throw new AuthenticatorException($"No record found for {username}");
 
         return credential;
+    }
+
+    public async Task SaveCredentialsAsync(Credential credential)
+    {
+        await _dynamoDBContext.SaveAsync(credential);
     }
 }

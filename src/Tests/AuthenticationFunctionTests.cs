@@ -20,6 +20,7 @@ public class AuthenticationFunctionTests
     private Mock<ILogger<AuthenticationFunction>> _mockLogger;
     private Mock<IAuthenticationService> _mockAuthenticationService;
     private Mock<ILambdaContext> _mockLambdaContext;
+    private Mock<IOptionsSnapshot<AuthenticationServiceOptions>> _mockAuthOptions;
 
     [SetUp]
     public void SetUp()
@@ -29,6 +30,12 @@ public class AuthenticationFunctionTests
         _mockAuthenticationService = _mockRepository.Create<IAuthenticationService>();
         _mockLambdaContext = _mockRepository.Create<ILambdaContext>();
         _mockLogger = new Mock<ILogger<AuthenticationFunction>>();
+        _mockAuthOptions = _mockRepository.Create<IOptionsSnapshot<AuthenticationServiceOptions>>();
+        _mockAuthOptions.Setup(x => x.Value).Returns(
+            new AuthenticationServiceOptions
+            {
+                Salt = "$2a$12$hG5lf/9xPbovhz8kATDgd.",
+            });
     }
 
     [Test]
@@ -68,18 +75,11 @@ public class AuthenticationFunctionTests
         _mockLogger.VerifyLog(logger => logger.LogWarning("Unauthorized: Credentials invalid or not found"), Times.Once);
     }
 
-    private static APIGatewayProxyRequest CreateValidRequest()
+    private APIGatewayProxyRequest CreateValidRequest()
     {
-        var mockOptionsSnapshot = new Mock<IOptionsSnapshot<AuthenticationServiceOptions>>();
-        mockOptionsSnapshot.Setup(x => x.Value).Returns(
-            new AuthenticationServiceOptions
-            {
-                CipherIv = "U2FsdGVkc3NzYWRzZmRhcw==",
-                CipherKey = "VGhpcyBpcyBhIGJhc2U2NCBlbmNvZGluZyBzdHJpbmc="
-            });
-        var aesEncryptionService = new AesEncryptionService(mockOptionsSnapshot.Object);
-        var username = aesEncryptionService.EncryptString("Username");
-        var password = aesEncryptionService.EncryptString("Password");
+        var aesEncryptionService = new PasswordHasherService(_mockAuthOptions.Object);
+        var username = "";//aesEncryptionService.EncryptString("Username");
+        var password = ""; //aesEncryptionService.EncryptString("Password");
         var request = new APIGatewayProxyRequest
         {
             Headers = new Dictionary<string, string>

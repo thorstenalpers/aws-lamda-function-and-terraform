@@ -1,8 +1,5 @@
 ﻿namespace AuthenticationService.Services;
-
-using Amazon.DynamoDBv2.DataModel;
-using global::AuthenticationService.Exceptions;
-using global::AuthenticationService.Models;
+using global::AuthenticationService.Repositories;
 using global::AuthenticationService.Security;
 
 public interface IAuthenticationService
@@ -19,16 +16,16 @@ public interface IAuthenticationService
 public class AuthenticationService : IAuthenticationService
 {
     private readonly ILogger<AuthenticationService> _logger;
-    private readonly IDynamoDBContext _dynamoDBContext;
-    private readonly IAesEncryptionService _aesEncryptionService;
+    private readonly IPasswordHasherService _passwordHasherService;
+    private readonly ICredentialRepository _credentialRepository;
 
     public AuthenticationService(ILogger<AuthenticationService> logger,
-                                    IDynamoDBContext dynamoDBContext,
-                                    IAesEncryptionService aesEncryptionService)
+                                    ICredentialRepository credentialRepository,
+                                    IPasswordHasherService passwordHasherService)
     {
         _logger = logger;
-        _dynamoDBContext = dynamoDBContext;
-        _aesEncryptionService = aesEncryptionService;
+        _passwordHasherService = passwordHasherService;
+        _credentialRepository = credentialRepository;
     }
 
     public async Task<bool> AreCredentialsValidAsync(string username, string password)
@@ -37,9 +34,8 @@ public class AuthenticationService : IAuthenticationService
             return false;
         try
         {
-            var credentials = await GetCredentials(username);
-            var encryptedPassword = _aesEncryptionService.EncryptString(password);
-            bool isPasswordValid = string.Equals(encryptedPassword, credentials.Password, StringComparison.Ordinal);
+            var credentials = await _credentialRepository.GetCredentialsAsync(username);
+            var isPasswordValid = _passwordHasherService.VerifyPassword(credentials.Password, password);
             if (!isPasswordValid)
             {
                 _logger.LogWarning($"Password of {username} invalid and not present in DB");
@@ -52,15 +48,5 @@ public class AuthenticationService : IAuthenticationService
             _logger.LogError(ex, $"{ex.Message}");
             return false;
         }
-    }
-
-    private async Task<Credential> GetCredentials(string username)
-    {
-        var encryptedUsername = _aesEncryptionService.EncryptString(username);
-        var credential = await _dynamoDBContext.LoadAsync<Credential>(encryptedUsername);
-        if (credential?.Password == null)
-            throw new AuthenticatorException($"No record found for {username}");
-
-        return credential;
     }
 }

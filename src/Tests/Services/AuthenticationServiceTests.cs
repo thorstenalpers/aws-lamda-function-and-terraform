@@ -1,7 +1,7 @@
 ﻿namespace AuthenticationService.Tests.Services;
 
-using Amazon.DynamoDBv2.DataModel;
 using AuthenticationService.Models;
+using AuthenticationService.Repositories;
 using AuthenticationService.Security;
 using AuthenticationService.Services;
 using Microsoft.Extensions.Logging;
@@ -15,8 +15,8 @@ using System.Threading.Tasks;
 public class AuthenticationServiceTests
 {
     private MockRepository _mockRepository;
-    private Mock<IDynamoDBContext> _mockDynamoDBContext;
-    private Mock<IAesEncryptionService> _mockAesEncryptionService;
+    private Mock<ICredentialRepository> _mockCredentialRepository;
+    private Mock<IPasswordHasherService> _mockPasswordHasherService;
     private Mock<ILogger<AuthenticationService>> _mockLogger;
 
     [SetUp]
@@ -24,8 +24,8 @@ public class AuthenticationServiceTests
     {
         _mockRepository = new MockRepository(MockBehavior.Strict);
 
-        _mockDynamoDBContext = _mockRepository.Create<IDynamoDBContext>();
-        _mockAesEncryptionService = _mockRepository.Create<IAesEncryptionService>();
+        _mockCredentialRepository = _mockRepository.Create<ICredentialRepository>();
+        _mockPasswordHasherService = _mockRepository.Create<IPasswordHasherService>();
         _mockLogger = new Mock<ILogger<AuthenticationService>>();
     }
 
@@ -33,8 +33,8 @@ public class AuthenticationServiceTests
     {
         return new AuthenticationService(
             _mockLogger.Object,
-            _mockDynamoDBContext.Object,
-            _mockAesEncryptionService.Object);
+            _mockCredentialRepository.Object,
+            _mockPasswordHasherService.Object);
     }
 
     [Test]
@@ -42,46 +42,43 @@ public class AuthenticationServiceTests
     {
         // Arrange
         var service = CreateService();
-        var plainCredential = new Credential
+        var plainCreds = new Credential
         {
-            Username = "username",
-            Password = "password"
+            Username = "Username",
+            Password = "Password"
         };
-        var encryptedCredential = new Credential
+        var hashedCreds = new Credential
         {
-            Username = "encryptedUsername",
-            Password = "encryptedPassword"
+            Username = "Username",
+            Password = "$2a$12$hG5lf/9xPbovhz8kATDgd.IpixYS9k3TuKLckJmE4CAMRlMNTmPxu"
         };
-        _mockDynamoDBContext.Setup(x => x.LoadAsync<Credential>(encryptedCredential.Username, default)).ReturnsAsync(encryptedCredential);
-        _mockAesEncryptionService.Setup(e => e.EncryptString(plainCredential.Username)).Returns(encryptedCredential.Username);
-        _mockAesEncryptionService.Setup(e => e.EncryptString(plainCredential.Password)).Returns(encryptedCredential.Password);
+        _mockCredentialRepository.Setup(x => x.GetCredentialsAsync(hashedCreds.Username)).ReturnsAsync(hashedCreds);
+        _mockPasswordHasherService.Setup(x => x.VerifyPassword(hashedCreds.Password, plainCreds.Password)).Returns(true);
 
         // Act
         var valid = await service.AreCredentialsValidAsync(
-            plainCredential.Username,
-            plainCredential.Password);
+            plainCreds.Username,
+            plainCreds.Password);
 
         // Assert
         Assert.True(valid);
     }
 
-    [TestCase("plainUsername", "", "encryptedUsername", "encryptedPassword")]
-    [TestCase("", "plainPassword", "encryptedUsername", "encryptedPassword")]
-    [TestCase("", "", "encryptedUsername", "encryptedPassword")]
+    [TestCase("plainUsername", "", "hashedUsername", "hashedPassword")]
+    [TestCase("", "plainPassword", "encryptedUsername", "hashedPassword")]
+    [TestCase("", "", "encryptedUsername", "hashedPassword")]
     [TestCase("plainUsername", "plainPassword", "encryptedUsername", "WrongPassword")]
     public async Task AreCredentialsValidAsync_Fail(string plainUsername, string plainPassword, string storedUsername, string storedPassword)
     {
         // Arrange
         var service = CreateService();
 
-        _mockDynamoDBContext.Setup(x => x.LoadAsync<Credential>(storedUsername, default)).ReturnsAsync(
+        _mockCredentialRepository.Setup(x => x.GetCredentialsAsync(storedUsername)).ReturnsAsync(
             new Credential
             {
                 Username = storedUsername,
                 Password = storedPassword
             });
-        _mockAesEncryptionService.Setup(e => e.EncryptString(plainUsername)).Returns(storedUsername);
-        _mockAesEncryptionService.Setup(e => e.EncryptString(plainPassword)).Returns(storedPassword);
 
         // Act
         var valid = await service.AreCredentialsValidAsync(

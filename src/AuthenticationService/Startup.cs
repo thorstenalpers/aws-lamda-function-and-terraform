@@ -3,6 +3,7 @@
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using AuthenticationService.Options;
+using AuthenticationService.Repositories;
 using AuthenticationService.Security;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -39,7 +40,8 @@ public class Startup
             return new DynamoDBContext(dynamoDbClient, dynamoDbConfig);
         });
 
-        services.AddScoped<IAesEncryptionService, AesEncryptionService>();
+        services.AddScoped<ICredentialRepository, CredentialRepository>();
+        services.AddScoped<IPasswordHasherService, PasswordHasherService>();
         services.AddScoped<Services.IAuthenticationService, AuthenticationService>();
         services.AddLogging(ConfigureLogging);
         services.AddAuthentication("ServiceAuthenticationScheme")
